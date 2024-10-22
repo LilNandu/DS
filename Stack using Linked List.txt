@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a node for the linked list
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* top = NULL;  // Initialize the top of the stack
+
+// Function to push an element onto the stack
+void push(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (!newNode) {
+        printf("Stack Overflow! Unable to push %d\n", data);
+        return;
+    }
+    newNode->data = data;
+    newNode->next = top;
+    top = newNode;
+    printf("%d pushed onto the stack.\n", data);
+}
+
+// Function to pop an element from the stack
+void pop() {
+    if (top == NULL) {
+        printf("Stack Underflow! The stack is empty.\n");
+        return;
+    }
+    struct Node* temp = top;
+    printf("%d popped from the stack.\n", top->data);
+    top = top->next;
+    free(temp);
+}
+
+// Function to display the elements of the stack
+void display() {
+    if (top == NULL) {
+        printf("The stack is empty.\n");
+        return;
+    }
+    printf("Stack elements: ");
+    struct Node* temp = top;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Main function
+int main() {
+    int choice, data;
+
+    while (1) {
+        printf("\nStack Operations:\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the element to push: ");
+                scanf("%d", &data);
+                push(data);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}

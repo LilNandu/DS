@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+// Define the maximum size for the stack
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+// Function to push an element onto the stack
+void push(int value) {
+    if (top == MAX - 1) {
+        printf("Stack Overflow!\n");
+        return;
+    }
+    stack[++top] = value;
+}
+
+// Function to pop an element from the stack
+int pop() {
+    if (top == -1) {
+        printf("Stack Underflow!\n");
+        exit(1);
+    }
+    return stack[top--];
+}
+
+// Function to evaluate the postfix expression
+int evaluatePostfix(char* exp) {
+    int i = 0;
+    while (exp[i] != '\0') {
+        // If the character is an operand, push it to the stack
+        if (isdigit(exp[i])) {
+            push(exp[i] - '0'); // Convert char to int and push
+        } else {
+            // If the character is an operator, pop two elements from the stack
+            int val1 = pop();
+            int val2 = pop();
+
+            switch (exp[i]) {
+                case '+':
+                    push(val2 + val1);
+                    break;
+                case '-':
+                    push(val2 - val1);
+                    break;
+                case '*':
+                    push(val2 * val1);
+                    break;
+                case '/':
+                    push(val2 / val1);
+                    break;
+            }
+        }
+        i++;
+    }
+    // The final result will be at the top of the stack
+    return pop();
+}
+
+int main() {
+    char exp[MAX];
+
+    // Input the postfix expression
+    printf("Enter a postfix expression: ");
+    scanf("%s", exp);
+
+    // Evaluate the postfix expression
+    int result = evaluatePostfix(exp);
+    printf("The result of the postfix expression is: %d\n", result);
+
+    return 0;
+}
